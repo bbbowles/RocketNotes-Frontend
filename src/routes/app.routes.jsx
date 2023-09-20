@@ -6,6 +6,7 @@ import {Profile} from "../pages/Profile"
 import {Details} from "../pages/Details"
 import {Cars} from "../pages/Cars"
 import {CarsAdmin} from "../pages/CarsAdmin"
+import { Address } from "../pages/Address"
 
 
 export function AppRoutes(){
@@ -17,6 +18,8 @@ export function AppRoutes(){
             <Route path ="/details/:id" element={<Details/>}/>
             <Route path ="/cars" element={<Cars/>}/>
             <Route path ="/carsadmin/:id?" element={<CarsAdmin/>}/>
+            <Route path ="/address" element={<Address/>}/>
+
 
 
         </Routes>

@@ -130,6 +130,10 @@ export function Home(){
                 <FiPlus/>
                 Criar Nota
             </NewNote>
+            <NewNote to="/cars">
+                <FiPlus/>
+                Carros
+            </NewNote>
 
         </Container>
     )
