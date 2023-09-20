@@ -1,0 +1,20 @@
+tabela - endereco
+
+cep
+nome(rua)
+cidade
+bairro
+numero
+estado
+complemento
+user_id
+
+subir front
+
+describe("",()=>{
+    it("",()=>{
+
+
+        expect()
+    })
+})
