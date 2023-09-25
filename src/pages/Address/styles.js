@@ -11,10 +11,9 @@ export const Container=styled.div`
     }
 `
 export const Table = styled.div`
-    margin: 20vh;
     background-color:black;
-    width:800px;
-    height:400px;
+    /* width:800px;
+    height:400px; */
     table{
     width: 100%;
     border-collapse: collapse;

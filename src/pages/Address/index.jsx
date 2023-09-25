@@ -13,7 +13,7 @@ import { useEffect } from "react";
 
 export function Address() {
 
-    const [address,setAddress] = useState([])
+    const [address, setAddress] = useState([])
 
     const fetchAddress = useCallback(() => {
         async function fetch() {
@@ -25,17 +25,17 @@ export function Address() {
             return
         }
         fetch()
-    },[])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchAddress()
 
 
         return
-    },[])
+    }, [])
 
-    const fetchUser = useCallback(()=>{
-        async function fetch(){
+    const fetchUser = useCallback(() => {
+        async function fetch() {
 
             const user = await api.get
 
@@ -44,8 +44,8 @@ export function Address() {
 
 
     console.log(address)
-    
-    async function handleDelete(address_id){
+
+    async function handleDelete(address_id) {
 
         console.log(address_id)
 
@@ -70,52 +70,57 @@ export function Address() {
                 </Link>
             </div>
 
-            <Table>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>CEP</th>
-                            <th>Nome</th>
-                            <th>Cidade</th>
-                            <th>Bairro</th>
-                            <th>Estado</th>
-                            <th>Número</th>
-                            <th>Complemento</th>
-                            <th>Usuário</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tmp">
-                        {
-                            address.map(addr => (
-                                <tr>
-                                    <td>{addr.cep}</td>
-                                    <td>{addr.nome}</td>
-                                    <td>{addr.cidade}</td>
-                                    <td>{addr.bairro}</td>
-                                    <td>{addr.estado}</td>
-                                    <td>{addr.numero}</td>
-                                    <td>{addr.complemento}</td>
-                                    <td>{addr.name}</td>
+            <div style={{
+                display:"flex",
+                justifyContent:"center"
+            }}>
+                <Table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CEP</th>
+                                <th>Nome</th>
+                                <th>Cidade</th>
+                                <th>Bairro</th>
+                                <th>Estado</th>
+                                <th>Número</th>
+                                <th>Complemento</th>
+                                <th>Usuário</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tmp">
+                            {
+                                address.map(addr => (
+                                    <tr>
+                                        <td>{addr.cep}</td>
+                                        <td>{addr.nome}</td>
+                                        <td>{addr.cidade}</td>
+                                        <td>{addr.bairro}</td>
+                                        <td>{addr.estado}</td>
+                                        <td>{addr.numero}</td>
+                                        <td>{addr.complemento}</td>
+                                        <td>{addr.name}</td>
 
 
-                                    <td>
-                                        <Link to={`/address/edit/${addr.id}`}>
-                                            <Button
-                                                title={<AiFillEdit />}>
-                                            </Button>
-                                        </Link>
-                                    </td>
-                                    <td><Button onClick={() => handleDelete(addr.id)} title={<AiOutlineDelete />}></Button></td>
-                                </tr>
-                            ))
-                        }
+                                        <td>
+                                            <Link to={`/address/edit/${addr.id}`}>
+                                                <Button
+                                                    title={<AiFillEdit />}>
+                                                </Button>
+                                            </Link>
+                                        </td>
+                                        <td><Button onClick={() => handleDelete(addr.id)} title={<AiOutlineDelete />}></Button></td>
+                                    </tr>
+                                ))
+                            }
 
-                    </tbody>
-                    <tfoot></tfoot>
-                </table>
-            </Table>
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+                </Table>
+            </div>
 
         </Container>
     )
