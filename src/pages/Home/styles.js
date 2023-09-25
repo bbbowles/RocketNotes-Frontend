@@ -7,17 +7,19 @@ export const Container = styled.div`
 
     display:grid;
     grid-template-columns: 250px auto;
-    grid-template-rows: 105px 128px auto 64px;
+    grid-template-rows: 105px 128px auto 64px 64px 64px;
     grid-template-areas:
     "brand header"
     "menu search"
     "menu content"
-    "newnote content";
+    "newnote content"
+    "newaddress content";
 
     background-color:${({theme})=> theme.COLORS.background_800};
 
 `
 export const Brand = styled.div`
+
     grid-area:brand;
     display:flex;
     justify-content:center;
@@ -35,9 +37,9 @@ export const Brand = styled.div`
 
 `
 export const Menu = styled.ul`
+
     grid-area:menu;
     background-color:${({theme})=> theme.COLORS.BACKGROUND_900};
-
 
     padding-top:64px;
     text-align:center;
@@ -68,4 +70,33 @@ export const NewNote= styled(Link)`
     svg{
         margin-right:8px;
     }
+`
+
+export const NewAddress = styled(Link)`
+    background-color:green;
+    border:none;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background: rgb(13,172,208);
+    background: linear-gradient(322deg, rgba(13,172,208,1) 0%, rgba(11,179,114,1) 100%);
+
+    color:white;
+    
+`   
+export const IndexAddress = styled(Link)`
+    background-color:green;
+    border:none;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background: rgb(13,172,208);
+    background: linear-gradient(322deg, rgba(13,172,208,.5) 0%, rgba(11,179,114,.5) 100%);
+
+    color:white;
+
 `

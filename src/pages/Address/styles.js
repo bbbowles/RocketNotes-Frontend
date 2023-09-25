@@ -21,7 +21,7 @@ export const Table = styled.div`
     }
     table *{
         font-size: 1.4rem;
-        color: black;
+        color: white;
     }
 
     table th{
@@ -37,10 +37,12 @@ export const Table = styled.div`
         border-top-right-radius: .4rem;
     }
     table tr:nth-child(even){
-        background: #eee;
+        background: rgb(13,172,208);
+        background: linear-gradient(322deg, rgba(13,172,208,.8) 0%, rgba(11,179,114,.8) 100%);
     }
     table tr:nth-child(odd){
-        background-color: #ddd;
+        background: rgb(13,172,208);
+        background: linear-gradient(322deg, rgba(13,172,208,.7) 0%, rgba(11,179,114,.7) 100%);
     }
     table td{
         padding: 1.5rem;

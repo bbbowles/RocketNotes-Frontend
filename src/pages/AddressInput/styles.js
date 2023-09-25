@@ -12,7 +12,8 @@ export const Container = styled.div`
 export const InputBox = styled.form`
     width:50%;
     background: rgb(13,172,208);
-    background: linear-gradient(322deg, rgba(13,172,208,1) 0%, rgba(11,179,114,1) 100%);     display:block;
+    background: linear-gradient(322deg, rgba(13,172,208,1) 0%, rgba(11,179,114,1) 100%);     
+    display:block;
     border-radius:2%;
     padding-top:20px;
 
@@ -28,7 +29,6 @@ export const InputBox = styled.form`
     }
 
     
-
     >div{
         justify-content:space-between;
         margin-bottom:20px;
@@ -43,23 +43,32 @@ export const InputBox = styled.form`
         >div{
             width:60%;
             display:flex;
+
+
             input{
                 height:37px;
                 font-size:24px;
                 border:none;
+                border-radius:8px;
             }
+
+
             select{
                 width:328px;
                 height:37px;
                 font-size:24px;
                 border:none;
                 font-family: 'Roboto', sans-serif;
+                border-radius:8px;
+
                 >option{
                     font-size:24px;
                     font-family: 'Roboto', sans-serif;
                 }
 
             }
+
+
             p{
                 font-size:20px;
                 font-family: 'Roboto', sans-serif;
@@ -72,6 +81,8 @@ export const InputBox = styled.form`
 
                 margin-left:2px;
             }
+
+
             }
     }
     

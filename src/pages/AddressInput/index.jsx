@@ -56,6 +56,7 @@ export function AddressInput() {
                 complemento: data.complemento,
                 user_id: data.user_id
             })
+            console.log(resposta)
             alert("alerta temporario!, endereco atualizado com sucesso")
             return resposta
 
@@ -68,7 +69,7 @@ export function AddressInput() {
         }
     })
 
-    const handleParam = useCallback((id) => {
+    const setAddressEditValues = useCallback((id) => {
         async function handle() {
             const address = await api.get(`http://localhost:3002/addr/${id}`)
 
@@ -109,10 +110,15 @@ export function AddressInput() {
     }, [])
 
     useEffect(() => {
-        fetchUsers()
-        if (params.id) {
-            handleParam(params.id)
+        // criar async
+        async function useEffectAsync() {
+            await fetchUsers()
+            if (params.id) {
+                setAddressEditValues(params.id)
+            }
         }
+        useEffectAsync()
+
     }, [])
 
 
@@ -125,7 +131,7 @@ export function AddressInput() {
             </style>
             <Header />
             <div class="logoutArrow">
-                <Link to="/address">
+                <Link to="/">
                     <FiArrowLeft />
                 </Link>
             </div>
@@ -142,11 +148,11 @@ export function AddressInput() {
                     <p>CEP</p>
                     <div>
                         <input type="number" {...register("cep", {
-                            required: { value: true, message: "é preciso informar o cep!" },
-                            maxLength: { value: 8, message: "o cep não contem 8 digitos" },
-                            minLength: { value: 8, message: "o cep não contem 8 digitos" }
+                            required: { value: true, message: "é preciso informar o cep!" }
+                            // maxLength: { value: 8, message: "o cep não contem 8 digitos" },
+                            // minLength: { value: 8, message: "o cep não contem 8 digitos" }
                         })} />
-                        <p>{errors.cep?.message}</p>
+                        {/* <p>{errors.cep?.message}</p> */}
                     </div>
                 </div>
 
