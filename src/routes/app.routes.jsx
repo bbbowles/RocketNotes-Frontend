@@ -21,7 +21,7 @@ export function AppRoutes(){
             <Route path ="/cars" element={<Cars/>}/>
             <Route path ="/carsadmin/:id?" element={<CarsAdmin/>}/>
             <Route path ="/address" element={<Address/>}/>
-            <Route path ="/address/edit/:id?" element={<AddressInput/>}/>
+            <Route path ="/address/add/:id?" element={<AddressInput/>}/>
 
 
 

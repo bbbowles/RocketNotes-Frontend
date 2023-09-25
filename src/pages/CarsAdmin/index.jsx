@@ -68,17 +68,6 @@ export function CarsAdmin() {
 
 
     })
-    const userShow = useCallback((id) => {
-
-        async function userFetch() {
-            const user = await api.get(`http://localhost:3002/users/${id}`)
-            console.log("user", user.data.name)
-            setSelectedName(user.data.name)
-            return
-
-        }
-        userFetch()
-    })
 
 
 

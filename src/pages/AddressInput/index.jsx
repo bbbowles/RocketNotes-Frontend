@@ -8,50 +8,114 @@ import { useState } from "react"
 import { api } from "../../services/api"
 import { FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router-dom"
+import { useParams } from "react-router-dom"
+
 
 
 
 export function AddressInput() {
 
+    const params = useParams()//RESPEITAR REGRAS DO HOOK
+
+
+    const [inputButtonText, setInputButtonText] = useState("Salvar")
     const [users, setUsers] = useState([])
+
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm()
 
-    // fazer primeiro o handle input para criar, depois checar se veio parametro e caso vier fazer o handle de editar
-    // colocar o select, fazer o mapa, useEffect e useCallback para puxar usuarios etc etc
 
-    const fetchUsers = useCallback(()=>{
-        async function fetch(){
+
+    const handleInput = useCallback((data) => {
+        async function handleCreate() {
+
+            //faco ou nao um if se todos estao aki? o forms ja faz isso
+            //devo colocar um padrao para o complemento ser null?
+            const resposta = await api.post(`http://localhost:3002/addr`, {
+                cep: data.cep,
+                nome: data.nome,
+                cidade: data.cidade,
+                bairro: data.bairro,
+                estado: data.estado,
+                numero: data.numero,
+                complemento: data.complemento,
+                user_id: data.user_id
+
+            })
+            alert("alerta temporario!, endereco adicionado com sucesso")
+            return resposta
+        }
+        async function handleUpdate(id){
+            const resposta = await api.put(`http://localhost:3002/addr/${id}`,{
+                cep: data.cep,
+                nome: data.nome,
+                cidade: data.cidade,
+                bairro: data.bairro,
+                estado: data.estado,
+                numero: data.numero,
+                complemento: data.complemento,
+                user_id: data.user_id
+            })
+            alert("alerta temporario!, endereco atualizado com sucesso")
+            return resposta
+
+        }
+
+        if(params.id){
+            handleUpdate(params.id)
+        }else{
+            handleCreate()
+        }
+    })
+
+    const handleParam = useCallback((id) => {
+        async function handle() {
+            const address = await api.get(`http://localhost:3002/addr/${id}`)
+
+            console.log(address.data)
+
+            if (address.data.id) {
+                setInputButtonText("Editar")
+
+                setValue("cep", address.data.cep)
+                setValue("nome", address.data.nome)
+                setValue("cidade", address.data.cidade)
+                setValue("bairro", address.data.bairro)
+                setValue("estado", address.data.estado)
+                setValue("numero", address.data.numero)
+                setValue("user_id", address.data.user_id)
+
+                if (address.data.complemento) {
+                    setValue("complemento", address.data.complemento)
+                }
+            }
+        }
+        handle()
+    })
+
+
+
+
+
+
+    const fetchUsers = useCallback(() => {
+        async function fetch() {
             const dbUsers = await api.get("http://localhost:3002/users/index")
 
             setUsers(dbUsers.data)
 
         }
         fetch()
-    },[])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchUsers()
-    },[])
+        if (params.id) {
+            handleParam(params.id)
+        }
+    }, [])
 
 
-    async function handleInput(data){
-        //faco ou nao um if se todos estao aki? o forms ja faz isso
-        //devo colocar um padrao para o complemento ser null?
-        const resposta = await api.post(`http://localhost:3002/addr`,{
-            cep:data.cep,
-            nome:data.nome,
-            cidade:data.cidade,
-            bairro:data.bairro,
-            estado:data.estado,
-            numero:data.numero,
-            complemento:data.complemento,
-            user_id:data.user_id
-            
-        })
-        alert("alerta temporario!, endereco adicionado com sucesso")
-        return resposta
-    }
 
 
     return (
@@ -61,7 +125,7 @@ export function AddressInput() {
             </style>
             <Header />
             <div class="logoutArrow">
-                <Link to="/">
+                <Link to="/address">
                     <FiArrowLeft />
                 </Link>
             </div>
@@ -119,14 +183,14 @@ export function AddressInput() {
                 <div>
                     <p>Complemento</p>
                     <div>
-                        <input placeholder="*opcional" type="text" {...register("complemento",{required:{value:false}})} />
+                        <input placeholder="*opcional" type="text" {...register("complemento", { required: { value: false } })} />
                     </div>
                 </div>
 
                 <div>
                     <p>Usuário</p>
                     <div>
-                        <select {...register("user_id",{ required: { value: true, message: "é preciso informar o usuario!" } })}>
+                        <select {...register("user_id", { required: { value: true, message: "é preciso informar o usuario!" } })}>
                             <option value="">Clique para expandir</option>
                             {
                                 users.map(user => (
@@ -137,7 +201,7 @@ export function AddressInput() {
                     </div>
                 </div>
 
-                <SubmitButton type="submit">Salvar</SubmitButton>
+                <SubmitButton type="submit">{inputButtonText}</SubmitButton>
 
                 {/* colocar um botao estilo Button do components */}
 

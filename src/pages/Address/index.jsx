@@ -105,7 +105,7 @@ export function Address() {
 
 
                                         <td>
-                                            <Link to={`/address/edit/${addr.id}`}>
+                                            <Link to={`/address/add/${addr.id}`}>
                                                 <Button
                                                     title={<AiFillEdit />}>
                                                 </Button>
