@@ -39,30 +39,40 @@ export const InputBox = styled.form`
         font-size:35px;
         font-family: 'Roboto', sans-serif;
         color: white;
-    }
-
-
-    >div{
-        width:60%;
-        display:flex;
-        input{
-            height:37px;
-            font-size:24px;
-            border:none;
-        }
-        select{
-            width:328px;
-            height:37px;
-            font-size:24px;
-            border:none;
-            font-family: 'Roboto', sans-serif;
-            >option{
+        }   
+        >div{
+            width:60%;
+            display:flex;
+            input{
+                height:37px;
                 font-size:24px;
-                font-family: 'Roboto', sans-serif;
+                border:none;
             }
+            select{
+                width:328px;
+                height:37px;
+                font-size:24px;
+                border:none;
+                font-family: 'Roboto', sans-serif;
+                >option{
+                    font-size:24px;
+                    font-family: 'Roboto', sans-serif;
+                }
 
-        }
-        }
+            }
+            p{
+                font-size:20px;
+                font-family: 'Roboto', sans-serif;
+                font-weight: 900;
+                font-style:italic;
+
+                color:red;
+
+                text-shadow:0px 0px 4px rgba(0,0,0,0.4);
+
+                margin-left:2px;
+            }
+            }
     }
     
 `

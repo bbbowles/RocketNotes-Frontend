@@ -45,8 +45,8 @@ export function AddressInput() {
             alert("alerta temporario!, endereco adicionado com sucesso")
             return resposta
         }
-        async function handleUpdate(id){
-            const resposta = await api.put(`http://localhost:3002/addr/${id}`,{
+        async function handleUpdate(id) {
+            const resposta = await api.put(`http://localhost:3002/addr/${id}`, {
                 cep: data.cep,
                 nome: data.nome,
                 cidade: data.cidade,
@@ -61,9 +61,9 @@ export function AddressInput() {
 
         }
 
-        if(params.id){
+        if (params.id) {
             handleUpdate(params.id)
-        }else{
+        } else {
             handleCreate()
         }
     })
@@ -121,7 +121,7 @@ export function AddressInput() {
     return (
         <Container>
             <style>
-                @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,900&display=swap');
             </style>
             <Header />
             <div class="logoutArrow">
@@ -141,42 +141,53 @@ export function AddressInput() {
                 <div>
                     <p>CEP</p>
                     <div>
-                        <input type="number" {...register("cep", { required: { value: true, message: "é preciso informar o nome do carro!" } })} />
+                        <input type="number" {...register("cep", {
+                            required: { value: true, message: "é preciso informar o cep!" },
+                            maxLength: { value: 8, message: "o cep não contem 8 digitos" },
+                            minLength: { value: 8, message: "o cep não contem 8 digitos" }
+                        })} />
+                        <p>{errors.cep?.message}</p>
                     </div>
                 </div>
 
                 <div>
                     <p>Nome da rua</p>
                     <div>
-                        <input type="text" {...register("nome", { required: { value: true, message: "é preciso informar o nome do carro!" } })} />
+                        <input type="text" {...register("nome", { required: { value: true, message: "é preciso informar a rua!" } })} />
+                        <p>{errors.nome?.message}</p>
+
                     </div>
                 </div>
 
                 <div>
                     <p>Cidade</p>
                     <div>
-                        <input type="text" {...register("cidade", { required: { value: true, message: "é preciso informar o nome do carro!" } })} />
+                        <input type="text" {...register("cidade", { required: { value: true, message: "é preciso informar a cidade!" } })} />
+                        <p>{errors.cidade?.message}</p>
                     </div>
                 </div>
 
                 <div>
                     <p>Bairro</p>
                     <div>
-                        <input type="text" {...register("bairro", { required: { value: true, message: "é preciso informar o nome do carro!" } })} />
+                        <input type="text" {...register("bairro", { required: { value: true, message: "é preciso informar o bairro!" } })} />
+                        <p>{errors.bairro?.message}</p>
                     </div>
                 </div>
 
                 <div>
                     <p>Estado</p>
                     <div>
-                        <input type="text" {...register("estado", { required: { value: true, message: "é preciso informar o nome do carro!" } })} />
+                        <input type="text" {...register("estado", { required: { value: true, message: "é preciso informar o estado!" } })} />
+                        <p>{errors.estado?.message}</p>
                     </div>
                 </div>
 
                 <div>
                     <p>Número</p>
                     <div>
-                        <input type="number" {...register("numero", { required: { value: true, message: "é preciso informar o nome do carro!" } })} />
+                        <input type="number" {...register("numero", { required: { value: true, message: "é preciso informar o número!" } })} />
+                        <p>{errors.numero?.message}</p>
                     </div>
                 </div>
 
@@ -198,6 +209,7 @@ export function AddressInput() {
                                 ))
                             }
                         </select>
+                        <p>{errors.user_id?.message}</p>
                     </div>
                 </div>
 
@@ -209,6 +221,8 @@ export function AddressInput() {
 
 
             </InputBox>
+            <p>{errors.cep?.message}</p>
+
 
         </Container>
     )
