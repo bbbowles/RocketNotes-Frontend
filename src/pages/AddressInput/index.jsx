@@ -1,4 +1,4 @@
-import { Container, InputBox, SubmitButton } from "./styles"
+import { Container, InputBox, SubmitButton, InputSegments } from "./styles"
 import { Header } from "../../components/Header"
 import { useForm } from "react-hook-form"
 import { Button } from "../../components/Button"
@@ -145,78 +145,80 @@ export function AddressInput() {
             })}>
                 <h1>Adicionar Endereço</h1>
                 <div>
-                    <p>CEP</p>
-                    <div>
-                        <input type="number" {...register("cep", {
-                            required: { value: true, message: "é preciso informar o cep!" }
-                            // maxLength: { value: 8, message: "o cep não contem 8 digitos" },
-                            // minLength: { value: 8, message: "o cep não contem 8 digitos" }
-                        })} />
-                        {/* <p>{errors.cep?.message}</p> */}
-                    </div>
-                </div>
+                    <InputSegments>
+                        <p>CEP</p>
+                        <div>
+                            <input type="number"  {...register("cep", {
+                                required: { value: true, message: "é preciso informar o cep!" }
+                                // maxLength: { value: 8, message: "o cep não contem 8 digitos" },
+                                // minLength: { value: 8, message: "o cep não contem 8 digitos" }
+                            })} />
+                            {/* <p>{errors.cep?.message}</p> */}
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Nome da rua</p>
-                    <div>
-                        <input type="text" {...register("nome", { required: { value: true, message: "é preciso informar a rua!" } })} />
-                        <p>{errors.nome?.message}</p>
+                    <InputSegments>
+                        <p>Nome da rua</p>
+                        <div>
+                            <input type="text" {...register("nome", { required: { value: true, message: "é preciso informar a rua!" } })} />
+                            <p>{errors.nome?.message}</p>
 
-                    </div>
-                </div>
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Cidade</p>
-                    <div>
-                        <input type="text" {...register("cidade", { required: { value: true, message: "é preciso informar a cidade!" } })} />
-                        <p>{errors.cidade?.message}</p>
-                    </div>
-                </div>
+                    <InputSegments>
+                        <p>Cidade</p>
+                        <div>
+                            <input type="text" {...register("cidade", { required: { value: true, message: "é preciso informar a cidade!" } })} />
+                            <p>{errors.cidade?.message}</p>
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Bairro</p>
-                    <div>
-                        <input type="text" {...register("bairro", { required: { value: true, message: "é preciso informar o bairro!" } })} />
-                        <p>{errors.bairro?.message}</p>
-                    </div>
-                </div>
+                    <InputSegments>
+                        <p>Bairro</p>
+                        <div>
+                            <input type="text" {...register("bairro", { required: { value: true, message: "é preciso informar o bairro!" } })} />
+                            <p>{errors.bairro?.message}</p>
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Estado</p>
-                    <div>
-                        <input type="text" {...register("estado", { required: { value: true, message: "é preciso informar o estado!" } })} />
-                        <p>{errors.estado?.message}</p>
-                    </div>
-                </div>
+                    <InputSegments>
+                        <p>Estado</p>
+                        <div>
+                            <input type="text" {...register("estado", { required: { value: true, message: "é preciso informar o estado!" } })} />
+                            <p>{errors.estado?.message}</p>
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Número</p>
-                    <div>
-                        <input type="number" {...register("numero", { required: { value: true, message: "é preciso informar o número!" } })} />
-                        <p>{errors.numero?.message}</p>
-                    </div>
-                </div>
+                    <InputSegments>
+                        <p>Número</p>
+                        <div>
+                            <input type="number" {...register("numero", { required: { value: true, message: "é preciso informar o número!" } })} />
+                            <p>{errors.numero?.message}</p>
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Complemento</p>
-                    <div>
-                        <input placeholder="*opcional" type="text" {...register("complemento", { required: { value: false } })} />
-                    </div>
-                </div>
+                    <InputSegments>
+                        <p>Complemento</p>
+                        <div>
+                            <input placeholder="*opcional" type="text" {...register("complemento", { required: { value: false } })} />
+                        </div>
+                    </InputSegments>
 
-                <div>
-                    <p>Usuário</p>
-                    <div>
-                        <select {...register("user_id", { required: { value: true, message: "é preciso informar o usuario!" } })}>
-                            <option value="">Clique para expandir</option>
-                            {
-                                users.map(user => (
-                                    <option value={user.id} >{user.name}</option>
-                                ))
-                            }
-                        </select>
-                        <p>{errors.user_id?.message}</p>
-                    </div>
+                    <InputSegments>
+                        <p>Usuário</p>
+                        <div>
+                            <select {...register("user_id", { required: { value: true, message: "é preciso informar o usuario!" } })}>
+                                <option value="">Clique para expandir</option>
+                                {
+                                    users.map(user => (
+                                        <option value={user.id} >{user.name}</option>
+                                    ))
+                                }
+                            </select>
+                            <p>{errors.user_id?.message}</p>
+                        </div>
+                    </InputSegments>
                 </div>
 
                 <SubmitButton type="submit">{inputButtonText}</SubmitButton>

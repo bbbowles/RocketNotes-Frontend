@@ -10,38 +10,61 @@ export const Container = styled.div`
 `
 
 export const InputBox = styled.form`
-    width:50%;
     background: rgb(13,172,208);
     background: linear-gradient(322deg, rgba(13,172,208,1) 0%, rgba(11,179,114,1) 100%);     
     display:block;
     border-radius:2%;
     padding-top:20px;
+    width:60%;
 
 
     margin:50px auto;
 
-    >h1{
+    h1{
         font-size:50px;
         font-family: 'Roboto', sans-serif;
         font-weight:700;
         padding-bottom:40px;
         text-align:center;
     }
+    >div{
+        padding:0 20px;
+    }
 
     
-    >div{
+`
+
+export const SubmitButton = styled.button`
+    width:100%;
+    background-color:#77FF6E;
+    color: white;
+    text-shadow:0px 0px 5px rgba(0,0,0,0.3);
+
+    height: 56px;
+    border:0;
+    padding:0 16px;
+    margin-top: 16px;
+    border-radius:10px;
+    font-weight:500;
+    font-size:25px;
+
+    &:disabled{
+        opacity:0.5;
+    }
+`
+
+export const InputSegments = styled.div`
         justify-content:space-between;
         margin-bottom:20px;
         display:flex;
-        >p{
+        p{
         text-align:left;
-        padding-left:10%;
         font-size:35px;
         font-family: 'Roboto', sans-serif;
         color: white;
         }   
         >div{
-            width:60%;
+            width:50%;
             display:flex;
 
 
@@ -69,40 +92,21 @@ export const InputBox = styled.form`
             }
 
 
-            p{
+            p{  
                 font-size:20px;
                 font-family: 'Roboto', sans-serif;
                 font-weight: 900;
                 font-style:italic;
 
-                color:red;
+                color:#ff6c54;
 
-                text-shadow:0px 0px 4px rgba(0,0,0,0.4);
+                
+
+                text-shadow:0px 0px 4px rgba(0,0,0,1);
 
                 margin-left:2px;
             }
 
 
             }
-    }
-    
-`
-
-export const SubmitButton = styled.button`
-    width:100%;
-    background-color:#77FF6E;
-    color: white;
-    text-shadow:0px 0px 5px rgba(0,0,0,0.3);
-
-    height: 56px;
-    border:0;
-    padding:0 16px;
-    margin-top: 16px;
-    border-radius:10px;
-    font-weight:500;
-    font-size:25px;
-
-    &:disabled{
-        opacity:0.5;
-    }
 `
