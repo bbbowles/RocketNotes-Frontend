@@ -1,4 +1,4 @@
-import { Container, Table } from "../Address/styles"
+import { AddressCreateButton, Container, Table } from "../Address/styles"
 import { Header } from "../../components/Header"
 import { Button } from "../../components/Button"
 import { AiOutlineDelete, AiFillEdit } from "react-icons/ai";
@@ -8,6 +8,9 @@ import { api } from "../../services/api";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import Swal from 'sweetalert2'
+
+
 
 
 
@@ -27,6 +30,17 @@ export function Address() {
         fetch()
     }, [])
 
+    const deleteAddress = useCallback((address_id)=>{
+        async function deleteAddr(){
+            await api.delete(`http://localhost:3002/addr/${address_id}`)
+
+            fetchAddress()
+
+            return
+        }
+        deleteAddr()
+    },[])
+
     useEffect(() => {
         fetchAddress()
 
@@ -34,31 +48,30 @@ export function Address() {
         return
     }, [])
 
-    const fetchUser = useCallback(() => {
-        async function fetch() {
-
-            const user = await api.get
-
-        }
-    })
-
-
-    console.log(address)
 
     async function handleDelete(address_id) {
 
         console.log(address_id)
 
-        alert("alerta provisorio. quer mesmo deletar? ")
+        Swal.fire({
+            icon: 'warning',
+            title: 'Você quer mesmo deletar o endereço?',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: "Não"
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
 
-        await api.delete(`http://localhost:3002/addr/${address_id}`)
-
-        fetchAddress()
-
-        return
-
-
+                deleteAddress(address_id)
+        
+                return
+        
+            }
+          })
     }
+
+
 
 
     return (
@@ -69,6 +82,8 @@ export function Address() {
                     <FiArrowLeft />
                 </Link>
             </div>
+
+            <AddressCreateButton to="/address/add">Criar endereços</AddressCreateButton>
 
             <div style={{
                 display:"flex",
@@ -94,7 +109,7 @@ export function Address() {
                             {
                                 address.map(addr => (
                                     <tr>
-                                        <td>{addr.cep}</td>
+                                        <td>{String(addr.cep).replace(/(?<=^.{2})/, ".").replace(/(?<=^.{6})/, "-")}</td>
                                         <td>{addr.nome}</td>
                                         <td>{addr.cidade}</td>
                                         <td>{addr.bairro}</td>
@@ -106,12 +121,12 @@ export function Address() {
 
                                         <td>
                                             <Link to={`/address/add/${addr.id}`}>
-                                                <Button
+                                                <Button 
                                                     title={<AiFillEdit />}>
                                                 </Button>
                                             </Link>
                                         </td>
-                                        <td><Button onClick={() => handleDelete(addr.id)} title={<AiOutlineDelete />}></Button></td>
+                                        <td><Button style={{background:"red"}} onClick={() => handleDelete(addr.id)} title={<AiOutlineDelete />}></Button></td>
                                     </tr>
                                 ))
                             }

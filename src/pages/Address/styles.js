@@ -1,11 +1,13 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
-export const Container=styled.div`
+
+export const Container = styled.div`
     >.logoutArrow{
         padding-left:20px;
         padding-top:20px;
         svg{
-        color:${({theme}) => theme.COLORS.GRAY_100};
+        color:${({ theme }) => theme.COLORS.GRAY_100};
         font-size:42px;
     } 
     }
@@ -74,4 +76,30 @@ export const Table = styled.div`
 
         cursor: pointer;
     }
+`
+
+export const AddressCreateButton = styled(Link)`
+        display:inline-flex;
+
+        align-items:center;
+
+        text-align:center;
+
+        margin-bottom:30px;
+
+        margin-left:120px;
+
+        background-color:#4ddf7e;
+        color: white;
+
+        height: 56px;
+        border:0;
+        padding:0 16px;
+        margin-top: 16px;
+        border-radius:10px;
+        font-weight:500;
+
+        &:disabled{
+            opacity:0.5;
+        }
 `

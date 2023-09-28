@@ -1,71 +1,126 @@
 import { Container, InputBox, SubmitButton, InputSegments } from "./styles"
 import { Header } from "../../components/Header"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { Button } from "../../components/Button"
 import { useEffect } from "react"
 import { useCallback } from "react"
 import { useState } from "react"
 import { api } from "../../services/api"
 import { FiArrowLeft } from "react-icons/fi";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
-
+import { ErrorPopUp } from "../../components/ErrorPopUp"
+import Swal from 'sweetalert2'
+import { PatternFormat } from 'react-number-format';
+import * as z from 'zod';
 
 
 
 export function AddressInput() {
 
+    const navigate = useNavigate()
+
     const params = useParams()//RESPEITAR REGRAS DO HOOK
 
+    const [isOpenState, setIsOpenState] = useState(false)
 
     const [inputButtonText, setInputButtonText] = useState("Salvar")
+    const [text, setText] = useState()
+    const [title, setTitle] = useState()
+    const [route, setRoute] = useState()
     const [users, setUsers] = useState([])
+    const [cep, setCep] = useState("")
 
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm()
+    const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm()
 
+    const addressSchema = z.object({
+        cep: z.string().length(8),
+        nome: z.string().min(2)
 
+    })
 
     const handleInput = useCallback((data) => {
         async function handleCreate() {
+            try {
+                const resposta = await api.post(`http://localhost:3002/addr`, {
+                    cep: data.cep,
+                    nome: data.nome,
+                    cidade: data.cidade,
+                    bairro: data.bairro,
+                    estado: data.estado,
+                    numero: data.numero,
+                    complemento: data.complemento,
+                    user_id: data.user_id
 
-            //faco ou nao um if se todos estao aki? o forms ja faz isso
-            //devo colocar um padrao para o complemento ser null?
-            const resposta = await api.post(`http://localhost:3002/addr`, {
-                cep: data.cep,
-                nome: data.nome,
-                cidade: data.cidade,
-                bairro: data.bairro,
-                estado: data.estado,
-                numero: data.numero,
-                complemento: data.complemento,
-                user_id: data.user_id
+                })
+                Swal.fire({
+                    position: 'center',
+                    title: 'sucesso!',
+                    text: 'O endereço foi criado',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                navigate("/address")
+                return resposta
+            } catch (error) {
 
-            })
-            alert("alerta temporario!, endereco adicionado com sucesso")
-            return resposta
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response.data.message,
+                })
+
+                // alert(error.response.data.message)
+
+                return error
+            }
+
         }
         async function handleUpdate(id) {
-            const resposta = await api.put(`http://localhost:3002/addr/${id}`, {
-                cep: data.cep,
-                nome: data.nome,
-                cidade: data.cidade,
-                bairro: data.bairro,
-                estado: data.estado,
-                numero: data.numero,
-                complemento: data.complemento,
-                user_id: data.user_id
-            })
-            console.log(resposta)
-            alert("alerta temporario!, endereco atualizado com sucesso")
-            return resposta
+            try {
+                const resposta = await api.put(`http://localhost:3002/addr/${id}`, {
+                    cep: data.cep,
+                    nome: data.nome,
+                    cidade: data.cidade,
+                    bairro: data.bairro,
+                    estado: data.estado,
+                    numero: data.numero,
+                    complemento: data.complemento,
+                    user_id: data.user_id
+                })
+                Swal.fire({
+                    position: 'top-end',
+                    title: 'sucesso!',
+                    text: 'O endereço foi atualizado',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+                navigate("/address")
+
+                return resposta
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response.data.message,
+                })
+                return error
+            }
+
 
         }
 
         if (params.id) {
             handleUpdate(params.id)
+
         } else {
             handleCreate()
+
+
+
         }
     })
 
@@ -79,6 +134,7 @@ export function AddressInput() {
                 setInputButtonText("Editar")
 
                 setValue("cep", address.data.cep)
+                setCep(address.data.cep)
                 setValue("nome", address.data.nome)
                 setValue("cidade", address.data.cidade)
                 setValue("bairro", address.data.bairro)
@@ -121,6 +177,39 @@ export function AddressInput() {
 
     }, [])
 
+    const handleOnChangeCep = useCallback((cep) => {
+        async function handle() {
+            cep = cep.replace('.', '')
+            cep = cep.replace("-", "")
+
+            if (!cep.includes("_")) {
+                setValue("cep",cep)
+                console.log("cep cheio")
+                
+                const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                const cepData = await resposta.json()
+
+
+
+                console.log(cepData)
+
+                if (!cepData.erro) {
+                    setValue("nome", cepData.logradouro)
+                    setValue("bairro", cepData.bairro)
+                    setValue("cidade", cepData.localidade)
+                    setValue("estado", cepData.uf)
+                }
+
+            }
+        }
+        handle()
+
+
+
+    })
+
+
+
 
 
 
@@ -129,6 +218,9 @@ export function AddressInput() {
             <style>
                 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,900&display=swap');
             </style>
+
+            <ErrorPopUp id="Popup" isOpenState={isOpenState} title={title} text={text} route={route} />
+
             <Header />
             <div class="logoutArrow">
                 <Link to="/">
@@ -137,10 +229,20 @@ export function AddressInput() {
             </div>
 
 
+
+
             <InputBox onSubmit={handleSubmit((data) => {
                 console.log(data)
 
+                data.cep = data.cep.replace('.', '')
+                data.cep = data.cep.replace("-", "")
+
+                const result = addressSchema.safeParse(data);
+
+                console.log(result)
+
                 handleInput(data)
+
 
             })}>
                 <h1>Adicionar Endereço</h1>
@@ -148,12 +250,28 @@ export function AddressInput() {
                     <InputSegments>
                         <p>CEP</p>
                         <div>
-                            <input type="number"  {...register("cep", {
-                                required: { value: true, message: "é preciso informar o cep!" }
-                                // maxLength: { value: 8, message: "o cep não contem 8 digitos" },
-                                // minLength: { value: 8, message: "o cep não contem 8 digitos" }
-                            })} />
-                            {/* <p>{errors.cep?.message}</p> */}
+                            <PatternFormat value={cep} format="##.###-###"
+                                allowEmptyFormatting mask="_" onChange={e => handleOnChangeCep(e.target.value)}
+                            // setValue("cep",e.target.value)
+                            // {...register("cep", {
+                            //     required: { value: true, message: "é preciso informar o cep!" },
+                            //     maxLength: { value: 8, message: "o cep não contem 8 digitos" },
+                            //     minLength: { value: 8, message: "o cep não contem 8 digitos" }
+                            // })}
+                            />
+
+
+
+
+
+
+
+                            {/* <input type="number"  {...register("cep", {
+                                required: { value: true, message: "é preciso informar o cep!" },
+                                maxLength: { value: 8, message: "o cep não contem 8 digitos" },
+                                minLength: { value: 8, message: "o cep não contem 8 digitos" }
+                            })} /> */}
+                            <p>{errors.cep?.message}</p>
                         </div>
                     </InputSegments>
 
@@ -229,9 +347,11 @@ export function AddressInput() {
 
 
             </InputBox>
-            <p>{errors.cep?.message}</p>
 
 
         </Container>
     )
 }
+
+// https://zod.dev/?id=basic-usage
+// https://7.dev/getting-started-with-zod/

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { FiPlus, FiSearch } from "react-icons/fi"
 import { api } from "../../services/api"
 
-import { Container, NewAddress, Brand, Menu, Search, Content, NewNote, IndexAddress } from "./styles"
+import { Container, NewAddress, Brand, Menu, Search, Content, NewNote } from "./styles"
 
 import { Note } from "../../components/Note"
 import { Input } from "../../components/Input"
@@ -126,13 +126,9 @@ export function Home() {
                 </Section>
             </Content>
 
-            <NewAddress to="/address/add">
-                Adicionar Endereço
-            </NewAddress>
-
-            <IndexAddress to="/address">
+            <NewAddress to="/address">
                 Ver Endereços
-            </IndexAddress>
+            </NewAddress>
             
 
 

@@ -2,7 +2,7 @@ import { Container, Message } from "./styles.js"
 import { Link } from "react-router-dom"
 
 
-export function ErrorPopUp({ title, text, textButton, isOpen, route }) {
+export function ErrorPopUp({ title, text, textButton, isOpenState, route }) {
 
 
     if (!title) {
@@ -20,12 +20,12 @@ export function ErrorPopUp({ title, text, textButton, isOpen, route }) {
 
 
     return (
-        <Container id="errorPopUp" open={isOpen}>
+        <Container id="errorPopUp" open={isOpenState}>
             <Message>
                 <h1>{title}</h1>
                 <p>{text}</p>
                 <Link to={route}>
-                    <button onClick={isOpen=false}>
+                    <button >
                         {textButton}
                     </button>
                 </Link>

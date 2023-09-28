@@ -7,7 +7,7 @@ export const Container = styled.div`
 
     display:grid;
     grid-template-columns: 250px auto;
-    grid-template-rows: 105px 128px auto 64px 64px 64px;
+    grid-template-rows: 105px 128px auto 64px 64px;
     grid-template-areas:
     "brand header"
     "menu search"
@@ -73,6 +73,8 @@ export const NewNote= styled(Link)`
 `
 
 export const NewAddress = styled(Link)`
+    grid-area:newaddress;
+
     background-color:green;
     border:none;
 
@@ -86,17 +88,3 @@ export const NewAddress = styled(Link)`
     color:white;
     
 `   
-export const IndexAddress = styled(Link)`
-    background-color:green;
-    border:none;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background: rgb(13,172,208);
-    background: linear-gradient(322deg, rgba(13,172,208,.5) 0%, rgba(11,179,114,.5) 100%);
-
-    color:white;
-
-`
