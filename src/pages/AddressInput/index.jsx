@@ -35,8 +35,19 @@ export function AddressInput() {
     const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm()
 
     const addressSchema = z.object({
-        cep: z.string().length(8),
-        nome: z.string().min(2)
+        cep: z.string().length(8,{message: "Um cep deve ter exatamente 8 números"}),
+
+        nome: z.string().min(3,{message:"Digite um nome de pelomenos 3 caracteres"}),
+
+        cidade: z.string().min(3,{message:"O nome da cidade deve ter pelomenos 3 caracteres"}),
+
+        bairro: z.string().min(3,{message:"O nome do bairro deve ter pelomenos 3 caracteres"}),
+
+        estado: z.string().length(2,{message:"O estado deve ser escrito em sigla, apenas 2 caracteres permitidos"}),
+        
+        numero: z.number().int().gte(1,{message:"O número da casa deve ser maior que zero"}),
+
+        user_id: z.number().int().gte(1,{message:"O user id deve ser maior que zero"})
 
     })
 
@@ -79,6 +90,7 @@ export function AddressInput() {
 
         }
         async function handleUpdate(id) {
+            console.log("handleUpdate")
             try {
                 const resposta = await api.put(`http://localhost:3002/addr/${id}`, {
                     cep: data.cep,
@@ -234,14 +246,44 @@ export function AddressInput() {
             <InputBox onSubmit={handleSubmit((data) => {
                 console.log(data)
 
-                data.cep = data.cep.replace('.', '')
-                data.cep = data.cep.replace("-", "")
+                data.cep = String(data.cep).replace('.', '')
+                data.cep = String(data.cep).replace("-", "")
+                data.user_id = Number(data.user_id)
 
-                const result = addressSchema.safeParse(data);
+                console.log(data)
 
-                console.log(result)
 
-                handleInput(data)
+                try{
+                    addressSchema.parse(data)
+
+                    handleInput(data)
+
+                    return
+
+                }catch(err){
+                    if (err instanceof z.ZodError) {
+                        console.log(err.issues);
+                        Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: err.issues[0].message,
+                                })
+                    }
+                }
+
+                // console.log(result)
+
+                // if(result.success==true){
+                //     handleInput(data)
+                // }else{
+                //     console.log(result.error)
+                //     Swal.fire({
+                //         icon: 'error',
+                //         title: 'Oops...',
+                //         text: result.error,
+                //     })
+                // }
+
 
 
             })}>
@@ -355,3 +397,28 @@ export function AddressInput() {
 
 // https://zod.dev/?id=basic-usage
 // https://7.dev/getting-started-with-zod/
+
+// Object { success: false, error: Getter }
+// ​
+// _error: ZodError: [
+//   {
+//     "code": "too_big",
+//     "maximum": 2,
+//     "type": "string",
+//     "inclusive": true,
+//     "exact": true,
+//     "message": "O estado deve ser escrito em sigla, apenas 2 caracteres permitidos",
+//     "path": [
+//       "estado"
+//     ]
+//   }
+// ]
+// ​
+// error: 
+// ​
+// success: false
+// ​
+// <get error()>: function error()
+// ​
+// <prototype>: Object { … }
+// index.jsx:254:24
