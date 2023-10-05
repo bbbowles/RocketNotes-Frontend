@@ -8,6 +8,7 @@ import {Cars} from "../pages/Cars"
 import {CarsAdmin} from "../pages/CarsAdmin"
 import { Address } from "../pages/Address"
 import { AddressInput } from "../pages/AddressInput"
+import {AddressTeste} from "../pages/AddressTeste"
 
 
 
@@ -22,6 +23,7 @@ export function AppRoutes(){
             <Route path ="/carsadmin/:id?" element={<CarsAdmin/>}/>
             <Route path ="/address" element={<Address/>}/>
             <Route path ="/address/add/:id?" element={<AddressInput/>}/>
+            <Route path ="/teste" element={<AddressTeste/>}/>
 
 
 

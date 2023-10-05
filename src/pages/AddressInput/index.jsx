@@ -1,6 +1,6 @@
 import { Container, InputBox, SubmitButton, InputSegments } from "./styles"
 import { Header } from "../../components/Header"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm} from "react-hook-form"
 import { Button } from "../../components/Button"
 import { useEffect } from "react"
 import { useCallback } from "react"
@@ -12,6 +12,8 @@ import { useParams } from "react-router-dom"
 import { ErrorPopUp } from "../../components/ErrorPopUp"
 import Swal from 'sweetalert2'
 import { PatternFormat } from 'react-number-format';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 
@@ -25,31 +27,33 @@ export function AddressInput() {
     const [isOpenState, setIsOpenState] = useState(false)
 
     const [inputButtonText, setInputButtonText] = useState("Salvar")
-    const [text, setText] = useState()
-    const [title, setTitle] = useState()
-    const [route, setRoute] = useState()
     const [users, setUsers] = useState([])
     const [cep, setCep] = useState("")
 
-
-    const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm()
-
     const addressSchema = z.object({
-        cep: z.string().length(8,{message: "Um cep deve ter exatamente 8 números"}),
-
-        nome: z.string().min(3,{message:"Digite um nome de pelomenos 3 caracteres"}),
-
-        cidade: z.string().min(3,{message:"O nome da cidade deve ter pelomenos 3 caracteres"}),
-
-        bairro: z.string().min(3,{message:"O nome do bairro deve ter pelomenos 3 caracteres"}),
-
-        estado: z.string().length(2,{message:"O estado deve ser escrito em sigla, apenas 2 caracteres permitidos"}),
         
-        numero: z.number().int().gte(1,{message:"O número da casa deve ser maior que zero"}),
+        
+        cep: z.string().trim().length(8, { message: "Um cep deve ter exatamente 8 números" }),
 
-        user_id: z.number().int().gte(1,{message:"O user id deve ser maior que zero"})
+        nome: z.string().min(3, { message: "Digite um nome de pelomenos 3 caracteres" }).max(20,{message:"Texto muito grande!"}),
+
+        cidade: z.string().min(3, { message: "O nome da cidade deve ter pelomenos 3 caracteres" }).max(30,{message:"Texto muito grande!"}),
+
+        bairro: z.string().min(3, { message: "O nome do bairro deve ter pelomenos 3 caracteres" }).max(15,{message:"Texto muito grande!"}),
+
+        estado: z.string().length(2, { message: "O estado deve ser escrito em sigla, apenas 2 caracteres permitidos" }),
+
+        numero: z.string().min(1, { message: "O número da casa deve ser maior que zero" }).max(4,{message:"Número muito grande!"}),
+
+        user_id: z.string().min(1, { message: "O user id deve ser maior que zero" })
 
     })
+
+
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+        resolver: zodResolver(addressSchema),
+    })
+
 
     const handleInput = useCallback((data) => {
         async function handleCreate() {
@@ -140,28 +144,28 @@ export function AddressInput() {
         async function handle() {
             const address = await api.get(`http://localhost:3002/addr/${id}`)
 
-            console.log(address.data)
+            address.data.cep = String(address.data.cep)
+
 
             if (address.data.id) {
                 setInputButtonText("Editar")
 
-                setValue("cep", address.data.cep)
-                setCep(address.data.cep)
-                setValue("nome", address.data.nome)
-                setValue("cidade", address.data.cidade)
-                setValue("bairro", address.data.bairro)
-                setValue("estado", address.data.estado)
-                setValue("numero", address.data.numero)
-                setValue("user_id", address.data.user_id)
+                setValue("cep", String(address.data.cep))
+                setCep(String(address.data.cep))//===================================================================
+                setValue("nome", String(address.data.nome))
+                setValue("cidade", String(address.data.cidade))
+                setValue("bairro", String(address.data.bairro))
+                setValue("estado", String(address.data.estado))
+                setValue("numero", String(address.data.numero))
+                setValue("user_id", String(address.data.user_id))
 
                 if (address.data.complemento) {
-                    setValue("complemento", address.data.complemento)
+                    setValue("complemento", String(address.data.complemento))
                 }
             }
         }
         handle()
     })
-
 
 
 
@@ -191,13 +195,17 @@ export function AddressInput() {
 
     const handleOnChangeCep = useCallback((cep) => {
         async function handle() {
-            cep = cep.replace('.', '')
+            console.log(cep,"alo")
+            cep = cep.replace('.', "")
             cep = cep.replace("-", "")
+            console.log(cep,"alo")
 
-            if (!cep.includes("_")) {
-                setValue("cep",cep)
+            setValue("cep", String(cep))
+            //era so colocar o setValue aki fora
+
+            if (cep.length==8) {
                 console.log("cep cheio")
-                
+
                 const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
                 const cepData = await resposta.json()
 
@@ -231,8 +239,6 @@ export function AddressInput() {
                 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,900&display=swap');
             </style>
 
-            <ErrorPopUp id="Popup" isOpenState={isOpenState} title={title} text={text} route={route} />
-
             <Header />
             <div class="logoutArrow">
                 <Link to="/">
@@ -246,6 +252,8 @@ export function AddressInput() {
             <InputBox onSubmit={handleSubmit((data) => {
                 console.log(data)
 
+
+                data.numero = Number(data.numero)
                 data.cep = String(data.cep).replace('.', '')
                 data.cep = String(data.cep).replace("-", "")
                 data.user_id = Number(data.user_id)
@@ -253,37 +261,24 @@ export function AddressInput() {
                 console.log(data)
 
 
-                try{
-                    addressSchema.parse(data)
+                try {
+                    // console.log("parse")
+                    // console.log(addressSchema.parse(data))
 
                     handleInput(data)
 
                     return
 
-                }catch(err){
+                } catch (err) {
                     if (err instanceof z.ZodError) {
                         console.log(err.issues);
                         Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops...',
-                                    text: err.issues[0].message,
-                                })
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: err.issues[0].message,
+                        })
                     }
                 }
-
-                // console.log(result)
-
-                // if(result.success==true){
-                //     handleInput(data)
-                // }else{
-                //     console.log(result.error)
-                //     Swal.fire({
-                //         icon: 'error',
-                //         title: 'Oops...',
-                //         text: result.error,
-                //     })
-                // }
-
 
 
             })}>
@@ -293,26 +288,7 @@ export function AddressInput() {
                         <p>CEP</p>
                         <div>
                             <PatternFormat value={cep} format="##.###-###"
-                                allowEmptyFormatting mask="_" onChange={e => handleOnChangeCep(e.target.value)}
-                            // setValue("cep",e.target.value)
-                            // {...register("cep", {
-                            //     required: { value: true, message: "é preciso informar o cep!" },
-                            //     maxLength: { value: 8, message: "o cep não contem 8 digitos" },
-                            //     minLength: { value: 8, message: "o cep não contem 8 digitos" }
-                            // })}
-                            />
-
-
-
-
-
-
-
-                            {/* <input type="number"  {...register("cep", {
-                                required: { value: true, message: "é preciso informar o cep!" },
-                                maxLength: { value: 8, message: "o cep não contem 8 digitos" },
-                                minLength: { value: 8, message: "o cep não contem 8 digitos" }
-                            })} /> */}
+                                allowEmptyFormatting patternChar="#" mask="" onChange={e => handleOnChangeCep(e.target.value)} />
                             <p>{errors.cep?.message}</p>
                         </div>
                     </InputSegments>
@@ -320,7 +296,7 @@ export function AddressInput() {
                     <InputSegments>
                         <p>Nome da rua</p>
                         <div>
-                            <input type="text" {...register("nome", { required: { value: true, message: "é preciso informar a rua!" } })} />
+                            <input type="text" {...register("nome")} />
                             <p>{errors.nome?.message}</p>
 
                         </div>
@@ -329,7 +305,7 @@ export function AddressInput() {
                     <InputSegments>
                         <p>Cidade</p>
                         <div>
-                            <input type="text" {...register("cidade", { required: { value: true, message: "é preciso informar a cidade!" } })} />
+                            <input type="text" {...register("cidade")} />
                             <p>{errors.cidade?.message}</p>
                         </div>
                     </InputSegments>
@@ -337,7 +313,7 @@ export function AddressInput() {
                     <InputSegments>
                         <p>Bairro</p>
                         <div>
-                            <input type="text" {...register("bairro", { required: { value: true, message: "é preciso informar o bairro!" } })} />
+                            <input type="text" {...register("bairro")} />
                             <p>{errors.bairro?.message}</p>
                         </div>
                     </InputSegments>
@@ -345,7 +321,7 @@ export function AddressInput() {
                     <InputSegments>
                         <p>Estado</p>
                         <div>
-                            <input type="text" {...register("estado", { required: { value: true, message: "é preciso informar o estado!" } })} />
+                            <input type="text" {...register("estado")} />
                             <p>{errors.estado?.message}</p>
                         </div>
                     </InputSegments>
@@ -353,7 +329,7 @@ export function AddressInput() {
                     <InputSegments>
                         <p>Número</p>
                         <div>
-                            <input type="number" {...register("numero", { required: { value: true, message: "é preciso informar o número!" } })} />
+                            <input type="number" {...register("numero")} />
                             <p>{errors.numero?.message}</p>
                         </div>
                     </InputSegments>
@@ -368,7 +344,7 @@ export function AddressInput() {
                     <InputSegments>
                         <p>Usuário</p>
                         <div>
-                            <select {...register("user_id", { required: { value: true, message: "é preciso informar o usuario!" } })}>
+                            <select {...register("user_id")}>
                                 <option value="">Clique para expandir</option>
                                 {
                                     users.map(user => (

@@ -1,0 +1,59 @@
+[33mcommit 487622c53bafeee7f7e426a57f0f67ff0a1f3fd8[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31mRocketNotes-Frontends/main[m[33m)[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Fri Sep 29 12:00:50 2023 +0000
+
+    adicionado validacao do zod, terminado o ambiente do endereco
+
+[33mcommit 129245886b9c66704b9fa10f39e5c62e91b3d657[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Thu Sep 28 21:22:56 2023 +0000
+
+    auto search por cep adicionado, a mascara do input agora é apenas visual, o db recebe apneas numeros
+
+[33mcommit 30dbc02befe766a97958d3c9323e59be5c167c70[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Tue Sep 26 11:30:19 2023 +0000
+
+    leve refatoracao do html da pagina de adicionar enderecos
+
+[33mcommit 74781a80a95f64bb82419f326a391c11210c4ce4[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Mon Sep 25 22:26:54 2023 +0000
+
+    adicionado dois botoes na root do site levando ao index e a criacao de enderecos
+
+[33mcommit 34f172d6032cc3b4f5fbb02ca3737659514e571c[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Mon Sep 25 12:31:28 2023 +0000
+
+    erros adicionados no forms do enderecos
+
+[33mcommit b91497a84e3521c583a23757ff2947906d0f63e6[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Mon Sep 25 01:53:53 2023 +0000
+
+    edit de enderecos foi adicionado caso algum id valido seja passado como parametro
+
+[33mcommit 67c6a7e0df5a7960ccc111fb30222ee12248b571[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Mon Sep 25 01:10:32 2023 +0000
+
+    adicionado a rota e a tela de add enderecos
+
+[33mcommit 18f0b4e2161952eb735d87a29417e4668148657f[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Fri Sep 22 11:28:29 2023 +0000
+
+    table de enderecos fazendo display do nome e centralizada
+
+[33mcommit bae7559d4dbcd115eef01253703b9f95131d7dfd[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Wed Sep 20 18:57:28 2023 +0000
+
+    pagina endereco adicionado
+
+[33mcommit 8c9955a8a88647aaaf1a5d0694d10d62983cefb5[m
+Author: bbbowles <joaobowles@gmail.com>
+Date:   Wed Sep 20 11:25:58 2023 +0000
+
+    primeiro commit
