@@ -45,7 +45,7 @@ export function Address() {
                         onClick={() => editAddress(id)}
                         color="inherit"
                     />,
-                    <GridActionsCellItem style={{width:"20px"}}
+                    <GridActionsCellItem style={{ width: "20px" }}
                         icon={<CustomAiOutlineDelete />}
                         label="Delete"
                         onClick={() => handleDelete(id)}
@@ -59,7 +59,11 @@ export function Address() {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm()
 
     const [rows, setRows] = useState([])
-
+    const [rowCountState, setRowCountState] = useState({})
+    const [paginationModel, setPaginationModel] = useState({
+        page: 0,
+        pageSize: 5,
+      })
 
     const fetchAddressIndex = useCallback(() => {
         async function fetch() {
@@ -104,11 +108,11 @@ export function Address() {
     }, [])
 
     useEffect(() => {
-        fetchAddressIndex()
+        handlePagination(paginationModel.page)
 
 
         return
-    }, [])
+    }, [paginationModel])
 
 
     const handleDelete = useCallback((address_id) => {
@@ -144,16 +148,25 @@ export function Address() {
         edit()
     }, [])
 
-    const handlePagination = useCallback((pages)=>{
-        async function handle(){
+    const handlePagination = useCallback((pages) => {
+        async function handle() {
+            console.log("handlepagintion")
+           
+
             const addr = await api.get(`http://localhost:3002/addr/pagination/${pages}`)
 
-            setRows(addr.data)
+            console.log(addr.data.rowCount)
+            console.log(paginationModel)
+
+            setRowCountState(addr.data.rowCount)
+
+            setRows(addr.data.addr)
 
             return
         }
         handle()
-    },[])
+    }, [])
+
 
 
 
@@ -195,7 +208,7 @@ export function Address() {
                 justifyContent: "center"
             }}>
                 <div style={{ marginTop: "30px", height: 400, width: '90%', background: "linear-gradient(322deg, rgba(13,172,208,.8) 0%, rgba(11,179,114,.8) 100%)" }}>
-                    <DataGrid style={{color:"#ffffff", fontSize:"24px"}}
+                    <DataGrid style={{ color: "#ffffff", fontSize: "24px" }}
                         rows={rows}
                         columns={columns}
                         initialState={{
@@ -203,24 +216,20 @@ export function Address() {
                                 paginationModel: { page: 0, pageSize: 5 },
                             },
                         }}
-                        pageSizeOptions={[5]}
+                        pageSizeOptions={[5,10]}
 
+                        rowCount={rowCountState}
+                        paginationModel={paginationModel}
                         paginationMode="server"
+                        onPaginationModelChange={setPaginationModel}
 
-                        rowCount={6} //puxar do backend
-                        
+
+
                     />
 
                 </div>
 
             </div>
-
-            <h2>Force pagination</h2>
-            <p>pages</p>
-
-            <button value={0} onClick={(e)=>handlePagination(e.target.value)}>1</button>
-            <button value={5} onClick={(e)=>handlePagination(e.target.value)}>2</button>
-            <button value={10} onClick={(e)=>handlePagination(e.target.value)}>2</button>
 
         </Container>
     )
